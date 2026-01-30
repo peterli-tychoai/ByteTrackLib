@@ -616,6 +616,45 @@ std::vector<STrackPtr> ByteTrackerImpl::update(const std::vector<Object>& object
     return output_stracks;
 }
 
+std::vector<STrackPtr> ByteTrackerImpl::predict()
+{
+    ////////////////// Step 1: Get detections //////////////////
+    frame_id_++;
+
+    // Create lists of existing STrack
+    std::vector<STrackPtr> active_stracks;
+    std::vector<STrackPtr> non_active_stracks;
+    std::vector<STrackPtr> strack_pool;
+
+    for (const auto& tracked_strack : tracked_stracks_)
+    {
+        if (!tracked_strack->isActivated())
+        {
+            // New ones
+            non_active_stracks.push_back(tracked_strack);
+        }
+        else
+        {
+            // Ones that exists before
+            active_stracks.push_back(tracked_strack);
+        }
+    }
+
+    strack_pool = jointStracks(active_stracks, lost_stracks_);
+
+    // Predict current pose by KF
+    std::vector<STrackPtr> output_stracks;
+    for (auto &strack : strack_pool)
+    {
+        strack->predictAndUpdate(frame_id_);
+        if (strack->getSTrackState() == STrackState::Tracked){
+            output_stracks.push_back(strack);
+        }
+    }
+
+    return output_stracks;
+}
+
 ByteTracker::ByteTracker(const unsigned int& max_age, const float& track_thresh,
                 const float& high_thresh, const float& match_thresh) 
 {

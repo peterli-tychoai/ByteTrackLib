@@ -34,6 +34,7 @@ public:
 
     void predict();
     void update(const STrack &new_track, const size_t &frame_id);
+    void predictAndUpdate(const size_t &frame_id);
 
     void markAsLost();
     void markAsRemoved();

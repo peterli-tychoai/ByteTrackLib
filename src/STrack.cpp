@@ -124,6 +124,14 @@ void STrack::update(const STrack &new_track, const size_t &frame_id)
     tracklet_len_++;
 }
 
+void STrack::predictAndUpdate(const size_t &frame_id)
+{
+    kalman_filter_.predict(mean_, covariance_);
+    updateRect();
+    frame_id_ = frame_id;
+    tracklet_len_++;
+}
+
 void STrack::markAsLost()
 {
     state_ = STrackState::Lost;

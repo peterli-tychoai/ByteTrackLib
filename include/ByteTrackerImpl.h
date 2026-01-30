@@ -20,6 +20,8 @@ public:
 
     std::vector<STrackPtr> update(const std::vector<Object>& objects);
 
+    std::vector<STrackPtr> predict();
+
 private:
     const float track_thresh_;
     const float high_thresh_;

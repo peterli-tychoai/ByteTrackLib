@@ -2,3 +2,4 @@ build*
 install*
 *.so
 *.a
+cmake*
