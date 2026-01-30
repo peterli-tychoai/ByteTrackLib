@@ -677,4 +677,21 @@ std::vector<Track> ByteTracker::update(const std::vector<Object>& objects)
     }
     return tracks;
 }
+
+std::vector<Track> ByteTracker::predict()
+{
+    std::vector<STrackPtr> stracks = tracker_impl_->predict();
+    std::vector<Track> tracks;
+    for (const auto& strack : stracks)
+    {
+        Track track{};
+        track.b_activated = strack->isActivated();
+        track.track_id = strack->getTrackId();
+        track.frame_id = strack->getFrameId();
+        track.object = strack->getObject();
+        tracks.push_back(track);
+    }
+    return tracks;
+}
+
 }

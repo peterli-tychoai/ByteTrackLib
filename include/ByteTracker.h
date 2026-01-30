@@ -47,6 +47,7 @@ public:
                 const float& match_thresh = 0.8);       //iou thresh for track match
     ~ByteTracker() = default;
     std::vector<Track> update(const std::vector<Object>& objects);
+    std::vector<Track> predict();
 
 private:
     std::shared_ptr<ByteTrackerImpl> tracker_impl_;
